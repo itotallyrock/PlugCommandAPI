@@ -40,3 +40,12 @@ function Command(name,args){
 		this.enabled = false;
 	}
 }
+
+/*API.on(API.CHAT_COMMAND,function(e){
+	var c = e.substring(1).split(" ")[0],args = e.substring(1).split(" ").slice(1);//Command Typed
+	for(var cmd in window){
+		if(typeof cmd == 'Command'){
+		
+		}
+	}
+});*/
