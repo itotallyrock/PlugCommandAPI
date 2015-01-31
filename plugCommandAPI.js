@@ -24,19 +24,19 @@ var callback;
 function Command(name,args){
 	this.enabled = false;
 	this.name = name;
-	this.getName(){
+	this.getName = function(){
 		return this.name;
 	};
-	this.getArgs(){
+	this.getArgs = function(){
 		return this.args;
 	};
-	this.setArgs(args){
+	this.setArgs = function(args){
 		this.args = args;
 	}
-	this.initialize(){
+	this.initialize = function(){
 		this.enabled = true;
 	};
-	this.disable(){
+	this.disable = function(){
 		this.enabled = false;
 	}
 }
