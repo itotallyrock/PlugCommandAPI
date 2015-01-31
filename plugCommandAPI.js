@@ -19,9 +19,8 @@ API.on(API.CHAT_COMMAND,function(e){
 			});
 */
 
-var callback;
-
-function Command(name,args){
+var Command = function(name,args){
+	var callback = function(){};
 	this.enabled = false;
 	this.name = name;
 	this.getName = function(){
