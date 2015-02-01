@@ -61,8 +61,8 @@ var Command = function(n,a){
 			return true;
 		}
 	};
-	this.copy = function(i){
-		return new Command(i.getName(),i.getArgs());
+	this.copy = function(n,i){
+		return new Command(n,i.getArgs().callback = i.callback);
 	}
 	this.toString = function(){
 		return "/"+this.getName()+" "+JSON.stringify(this.getArgs());
