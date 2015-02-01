@@ -79,7 +79,7 @@ API.on(API.CHAT_COMMAND,function(e){
 			if(Command.instances[i].getArgs().length == a.length){
 				Command.instances[i].callback(a);
 			}else{
-				throw new SyntaxError("Invalid Usage of Command: "+Command.instances[i].getName());
+				throw new TypeError("Invalid Usage of Command: "+Command.instances[i].getName());
 				return Command.instances[i].toString();
 			}
 		}
