@@ -18,11 +18,18 @@ API.on(API.CHAT_COMMAND,function(e){
 				}
 			});
 */
-
-var Command = function(name,args){
-	var callback = function(){};
-	this.enabled = false;
-	this.name = name;
+var Command = function(n,a){
+	if(!n){
+		throw new SyntaxError("Name parameter required");
+		return;
+	}
+	var enabled = true;
+	var name = n;
+	var args = a;
+	this.callback = function(){};
+	
+	Command.instances.push(this);
+	
 	this.getName = function(){
 		return this.name;
 	};
@@ -31,20 +38,45 @@ var Command = function(name,args){
 	};
 	this.setArgs = function(args){
 		this.args = args;
-	}
+	};
 	this.initialize = function(){
 		this.enabled = true;
 	};
-	this.disable = function(){
-		this.enabled = false;
+	this.enable = function(){
+		return true;
+		this.enabled = true;
 	}
-}
+	this.disable = function(){
+		return true;
+		this.enabled = false;
+	};
+	this.destroy = function () {
+		if(this.enabled == true){
+			throw new SyntaxError("Attempt to destroy a command before being disabled");
+			return false;
+		}else{
+			var i = 0;
+			while(Command.instances[i] !== this){i++;}
+			Command.instances.splice(i, 1);
+			return true;
+		}
+	};
+	this.copy = function(i){
+		return new Command(i.getName(),i.getArgs());
+	}
+	this.toString = function(){
+		return "/"+this.name+" "+JSON.stringify(this.args);
+	};
+};
 
-/*API.on(API.CHAT_COMMAND,function(e){
+Command.instances = [];
+
+API.on(API.CHAT_COMMAND,function(e){
 	var c = e.substring(1).split(" ")[0],args = e.substring(1).split(" ").slice(1);//Command Typed
-	for(var cmd in window){
-		if(typeof cmd == 'Command'){
-		
+	for(var i in Command.instances){
+		var cmd = Command.instances[i];
+		if(c == cmd.getName()){
+			
 		}
 	}
-});*/
+});
