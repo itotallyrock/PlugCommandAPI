@@ -23,7 +23,7 @@ var Command = function(n,a){
 		throw new SyntaxError("Name parameter required");
 		return;
 	}
-	var enabled = true;
+	var status = true;
 	var name = n;
 	var args = a;
 	this.callback = function(){};
@@ -37,21 +37,21 @@ var Command = function(n,a){
 		return args;
 	};
 	this.setArgs = function(a){
-		args = a;
-	};
-	this.initialize = function(){
-		this.enabled = true;
+		this.args = a;
 	};
 	this.enable = function(){
 		return true;
-		this.enabled = true;
+		this.status = true;
 	}
 	this.disable = function(){
 		return true;
-		this.enabled = false;
+		this.status = false;
 	};
+	this.getStatus = function(){
+		return status;
+	}
 	this.destroy = function () {
-		if(this.enabled == true){
+		if(this.status == true){
 			throw new SyntaxError("Attempt to destroy a command before being disabled");
 			return false;
 		}else{
@@ -75,12 +75,16 @@ API.on(API.CHAT_COMMAND,function(e){
 	var c = e.substring(1).split(" ")[0],a = e.substring(1).split(" ").slice(1);//Command Typed
 	for(var i in Command.instances){
 		if(c == Command.instances[i].getName()){
-			console.log("User typed: /"+Command.instances[i].getName()+" "+JSON.stringify(a));
-			if(Command.instances[i].getArgs().length == a.length){
-				Command.instances[i].callback(a);
+			if(Command.instances[i].getStatus()){
+				console.log("User typed: /"+Command.instances[i].getName()+" "+JSON.stringify(a));
+				if(Command.instances[i].getArgs().length == a.length){
+					Command.instances[i].callback(a);
+				}else{
+					throw new TypeError("Invalid Usage of Command: "+Command.instances[i].getName());
+					return Command.instances[i].toString();
+				}
 			}else{
-				throw new TypeError("Invalid Usage of Command: "+Command.instances[i].getName());
-				return Command.instances[i].toString();
+				return false;
 			}
 		}
 	}
