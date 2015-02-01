@@ -31,13 +31,13 @@ var Command = function(n,a){
 	Command.instances.push(this);
 	
 	this.getName = function(){
-		return this.name;
+		return name;
 	};
 	this.getArgs = function(){
-		return this.args;
+		return args;
 	};
-	this.setArgs = function(args){
-		this.args = args;
+	this.setArgs = function(a){
+		args = a;
 	};
 	this.initialize = function(){
 		this.enabled = true;
@@ -65,18 +65,23 @@ var Command = function(n,a){
 		return new Command(i.getName(),i.getArgs());
 	}
 	this.toString = function(){
-		return "/"+this.name+" "+JSON.stringify(this.args);
+		return "/"+this.getName()+" "+JSON.stringify(this.getArgs());
 	};
 };
 
 Command.instances = [];
 
 API.on(API.CHAT_COMMAND,function(e){
-	var c = e.substring(1).split(" ")[0],args = e.substring(1).split(" ").slice(1);//Command Typed
+	var c = e.substring(1).split(" ")[0],a = e.substring(1).split(" ").slice(1);//Command Typed
 	for(var i in Command.instances){
-		var cmd = Command.instances[i];
-		if(c == cmd.getName()){
-			
+		if(c == Command.instances[i].getName()){
+			console.log("User typed: /"+Command.instances[i].getName()+" "+JSON.stringify(a));
+			if(Command.instances[i].getArgs().length == a.length){
+				Command.instances[i].callback(a);
+			}else{
+				throw new SyntaxError("Invalid Usage of Command: "+Command.instances[i].getName());
+				return Command.instances[i].toString();
+			}
 		}
 	}
 });
