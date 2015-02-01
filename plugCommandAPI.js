@@ -84,4 +84,5 @@ API.on(API.CHAT_COMMAND,function(e){
 			}
 		}
 	}
+	throw new ReferenceError("Unknown command: "+c)
 });
