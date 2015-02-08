@@ -1,4 +1,16 @@
-//var CommandEvent = new Event("CommandEvent")
+/*
+
+USAGE of Event Capturing
+
+$(document).on('CommandEvent', function(e,d) {
+    console.log("name: "+d.name);
+    console.log("args: "+JSON.stringify(d.args));
+    console.log("valid: "+d.valid);
+    console.log(e.type+" triggered at "+e.timeStamp+" with command /"+name+" "+JSON.stringify(args)+" and status is "+valid);
+});
+
+*/
+
 var Command = function(n,a){
 	if(!n){
 		throw new SyntaxError("Name parameter required");
@@ -48,6 +60,10 @@ var Command = function(n,a){
 	this.toString = function(){
 		return "/"+this.getName()+" "+JSON.stringify(this.getArgs());
 	};
+	this.trigger = function(p){
+		$(document).trigger('CommandEvent',{name:"status",args:["gaming"],valid: true});
+		this.callback(p);
+	}
 };
 
 Command.instances = [];
@@ -59,9 +75,11 @@ API.on(API.CHAT_COMMAND,function(e){
 			if(Command.instances[i].getStatus()){
 				console.log("User typed: /"+Command.instances[i].getName()+" "+JSON.stringify(a));
 				if(Command.instances[i].getArgs().length == a.length){
+					$(document).trigger('CommandEvent',{name:c,args:a,valid: true});
 					return Command.instances[i].callback(a);
 				}else{
-					throw new TypeError("Invalid Usage of Command: "+Command.instances[i].getName());
+					//throw new TypeError("Invalid Usage of Command: "+Command.instances[i].getName());
+					$(document).trigger('CommandEvent',{name:c,args:a,valid: false});
 					return Command.instances[i].toString();
 				}
 			}else{
@@ -69,5 +87,6 @@ API.on(API.CHAT_COMMAND,function(e){
 			}
 		}
 	}
+	$(document).trigger('CommandEvent',{name:c,args:a,valid: false});
 	throw new ReferenceError("Unknown command: "+c)
 });
