@@ -33,11 +33,9 @@ var Command = function(n,a){
 		this.args = a;
 	};
 	this.enable = function(){
-		return true;
 		this.status = true;
 	}
 	this.disable = function(){
-		return true;
 		this.status = false;
 	};
 	this.getStatus = function(){
@@ -55,7 +53,7 @@ var Command = function(n,a){
 		}
 	};
 	this.copy = function(n,i){
-		return new Command(n,i.getArgs().callback = i.callback);
+		return new Command(n,i.getArgs()).callback = i.callback;
 	}
 	this.toString = function(){
 		return "/"+this.getName()+" "+JSON.stringify(this.getArgs());
