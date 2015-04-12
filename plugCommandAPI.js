@@ -12,6 +12,7 @@ $(document).on('CommandEvent', function(e,d) {
 */
 
 var Command = function(n,a){
+	console.log("New Command Created: "+n);
 	if(!n){
 		throw new SyntaxError("Name parameter required");
 		return;
