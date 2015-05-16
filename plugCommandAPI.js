@@ -48,8 +48,13 @@ var Command = function(n,a){
 			return false;
 		}else{
 			var i = 0;
-			while(Command.instances[i] !== this){i++;}
-			Command.instances.splice(i, 1);
+			for(i in Command.instances){
+				if(Command.instances[i] == this){
+					Command.instances.splice(i, 1);
+				}else{
+					i++;
+				}
+			}
 			return true;
 		}
 	};
@@ -60,7 +65,7 @@ var Command = function(n,a){
 		return "/"+this.getName()+" "+JSON.stringify(this.getArgs());
 	};
 	this.trigger = function(p){
-		$(document).trigger('CommandEvent',{name:"status",args:["gaming"],valid: true});
+		$(document).trigger('CommandEvent',{name:this.getName(),args:this.getArgs(),valid: true});
 		this.callback(p);
 	}
 };
